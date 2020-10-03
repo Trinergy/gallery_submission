@@ -18,17 +18,35 @@ class ImageList extends React.Component {
       );
   }
 
-  handleClick(id) {
-    console.log("hello", id)
-    // TODO POST API TO UPDATE FLAGGED - ON SUCCESS, SETSTATE - ON FAIL, RENDER ERROR
+  handleClick(id, flagged) {
+    const formData = new FormData();
+    formData.append('flagged', !flagged)
+
+    fetch(`http://localhost:8080/image/${id}`, {
+      method: 'PUT',
+      body: formData
+    })
+    .then(response => {
+      // This can be handled better with proper state management libarries - kept small for MVP
+      var copy = [...this.state.images];
+      var updatedImageIndex = copy.findIndex(image => image.id == id)
+      copy[updatedImageIndex] = {...copy[updatedImageIndex], ...{flagged: !flagged}}
+
+      this.setState({
+        images: copy
+      })
+    })
+    .catch(error => {
+    });
   }
 
 
   render() {
+    // Removed CSS management libraries to keep things simple
     const hasImages = this.state.images.length > 0
-    const imageList = this.state.images.map((i) => <li key={i.id}>
-      <img src={i.url}></img>
-      <a onClick={() => this.handleClick(i.id)} className="button is-primary"> Tag</a>
+    const imageList = this.state.images.map( i => <li key={i.id}>
+      <img border={i.flagged ? "10px solid" : ""} width="50%" height="auto" src={i.url}></img>
+      <a onClick={() => this.handleClick(i.id, i.flagged)} className="button is-primary"> Tag</a>
     </li>);
 
     if (hasImages) {
