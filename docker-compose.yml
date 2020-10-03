@@ -4,8 +4,14 @@ services:
     build: ./server
     ports:
       - "8080:8080"
+    depends_on:
+      - "database"
   client:
     build: ./client
     ports:
       - "3000:3000"
     tty: true
+  database:
+    build: ./db
+    ports:
+      - "5432:5432"
