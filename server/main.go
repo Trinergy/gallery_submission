@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -8,16 +9,47 @@ import (
 	"time"
 
 	"github.com/julienschmidt/httprouter"
+	_ "github.com/lib/pq"
 )
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "kennytest"
+	password = "password"
+	dbname   = "test_db"
+)
+
+// DB is a global variable for all handlers to access
+var DB *sql.DB
 
 // Index returns a JSON payload of Images
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	// TODO: Fetch Images from DB instead of hard-coded
-	images := []Image{
-		{ID: 1, URL: "https://picsum.photos/200/300", UpdatedAt: time.Now(), CreatedAt: time.Now(), Flagged: false},
-		{ID: 2, URL: "https://picsum.photos/200/300", UpdatedAt: time.Now(), CreatedAt: time.Now(), Flagged: true},
-		{ID: 3, URL: "https://picsum.photos/200/300", UpdatedAt: time.Now(), CreatedAt: time.Now(), Flagged: true},
-		{ID: 4, URL: "https://picsum.photos/200/300", UpdatedAt: time.Now(), CreatedAt: time.Now(), Flagged: false},
+	rows, _ := DB.Query("SELECT id,url,flagged,created_at,updated_at FROM images")
+	defer rows.Close()
+
+	var images []Image
+
+	for rows.Next() {
+		var id int
+		var flagged bool
+		var url string
+		var createdAt, updatedAt time.Time
+
+		err := rows.Scan(&id, &url, &flagged, &createdAt, &updatedAt)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		image := Image{
+			ID:        id,
+			Flagged:   flagged,
+			URL:       url,
+			CreatedAt: createdAt,
+			UpdatedAt: updatedAt,
+		}
+
+		images = append(images, image)
 	}
 
 	header := w.Header()
@@ -35,9 +67,29 @@ func UpdateImage(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func main() {
+	// setup router
 	router := httprouter.New()
 	router.GET("/", Index)
 	router.POST("/hello/:name", UpdateImage)
+
+	// establish db connection
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	db, err := sql.Open("postgres",
+		psqlInfo)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	DB = db
+
+	// verify db connection
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
