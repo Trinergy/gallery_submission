@@ -8,7 +8,7 @@ CREATE TABLE images (
 
 INSERT INTO images(url, flagged, created_at, updated_at) 
 VALUES 
-('https://picsum.photos/200/100', false, current_timestamp, current_timestamp),
-('https://source.unsplash.com/random', false, current_timestamp, current_timestamp),
-('https://loremflickr.com/320/240', false, current_timestamp, current_timestamp),
-('https://picsum.photos/200/300', false, current_timestamp, current_timestamp);
+('https://picsum.photos/id/237/200/300', false, current_timestamp, current_timestamp),
+('https://picsum.photos/id/1000/5626/3635', false, current_timestamp, current_timestamp),
+('https://picsum.photos/id/1025/4951/3301', false, current_timestamp, current_timestamp),
+('https://picsum.photos/id/102/4320/3240', false, current_timestamp, current_timestamp);
