@@ -18,3 +18,5 @@ COPY . ./
 
 # start app
 CMD ["yarn", "start"]
+
+EXPOSE 3000
