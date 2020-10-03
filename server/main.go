@@ -55,7 +55,7 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	header := w.Header()
 	header.Set("Content-Type", "application/json")
 	header.Set("Access-Control-Allow-Methods", header.Get("Allow"))
-	header.Set("Access-Control-Allow-Origin", "*")
+	header.Set("Access-Control-Allow-Origin", "http://localhost:3000")
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(images)
@@ -75,7 +75,21 @@ func UpdateImage(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		log.Fatal(err)
 	}
 
+	header := w.Header()
+	header.Set("Access-Control-Allow-Methods", header.Get("Allow"))
+	header.Set("Access-Control-Allow-Origin", "http://localhost:3000")
+
 	w.WriteHeader(http.StatusOK)
+}
+
+// PreflightHandler manual
+func PreflightHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
+	header := w.Header()
+	header.Set("Access-Control-Allow-Methods", "PUT")
+	header.Set("Access-Control-Allow-Origin", "http://localhost:3000")
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func main() {
@@ -83,6 +97,7 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", Index)
 	router.PUT("/image/:id", UpdateImage)
+	router.OPTIONS("/image/:id", PreflightHandler)
 
 	// establish db connection
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
