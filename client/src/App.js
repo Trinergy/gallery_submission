@@ -1,6 +1,6 @@
-import React from 'react';
-import ImageList from './components/imageList.js';
-import './App.css';
+import React from "react";
+import ImageList from "./components/imageList.js";
+import "./App.css";
 
 function App() {
   return (
@@ -8,10 +8,12 @@ function App() {
       <section className="section">
         <div className="container">
           <h1 className="title">
-            <strong className="has-text-warning-dark">Kenny's</strong> Useless Images
+            <strong className="has-text-warning-dark">Kenny's</strong> Useless
+            Images
           </h1>
           <p className="subtitle">
-            My first website with <strong className="has-text-primary-dark">Bulma</strong>!
+            My first website with{" "}
+            <strong className="has-text-primary-dark">Bulma</strong>!
           </p>
         </div>
       </section>
