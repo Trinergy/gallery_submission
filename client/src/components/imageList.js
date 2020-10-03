@@ -44,13 +44,14 @@ class ImageList extends React.Component {
   render() {
     // Removed CSS management libraries to keep things simple
     const hasImages = this.state.images.length > 0
-    const imageList = this.state.images.map( i => <li key={i.id}>
-      <img border={i.flagged ? "10px solid" : ""} width="50%" height="auto" src={i.url}></img>
+    const imageList = this.state.images.map( i => <li className="block" key={i.id}>
+      <img border={i.flagged ? "10px solid" : ""} width="30%" height="30%" src={i.url}></img>
+      <div></div>
       <a onClick={() => this.handleClick(i.id, i.flagged)} className="button is-primary"> Tag</a>
     </li>);
 
     if (hasImages) {
-      return <div>{imageList}</div>
+      return <ul list-style-type="none" >{imageList}</ul>
     } else {
       return <div>Oops, something went wrong! Please refresh!</div>
     }

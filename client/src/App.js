@@ -4,14 +4,14 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App has-background-primary-light">
       <section className="section">
         <div className="container">
           <h1 className="title">
-            Kenny's Useless Images
+            <strong className="has-text-warning-dark">Kenny's</strong> Useless Images
           </h1>
           <p className="subtitle">
-            My first website with <strong>Bulma</strong>!
+            My first website with <strong className="has-text-primary-dark">Bulma</strong>!
           </p>
         </div>
       </section>
