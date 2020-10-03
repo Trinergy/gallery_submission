@@ -20,7 +20,11 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		{ID: 4, URL: "https://picsum.photos/200/300", UpdatedAt: time.Now(), CreatedAt: time.Now(), Flagged: false},
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	header := w.Header()
+	header.Set("Content-Type", "application/json")
+	header.Set("Access-Control-Allow-Methods", header.Get("Allow"))
+	header.Set("Access-Control-Allow-Origin", "*")
+
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(images)
 }
