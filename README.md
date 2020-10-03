@@ -16,6 +16,7 @@ Free Ports:
 ## Instructions
 ```
 docker-compose build
-docker-compose up
+docker-compose up # CMD + C
+docker-compose up # Need to run twice (DB vs. Web service race condition - out of scope!)
 ```
 Go to `http://localhost:3000`
