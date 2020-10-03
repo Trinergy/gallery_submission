@@ -2,7 +2,9 @@
 Refresh my React knowledge, learn Docker and Golang on the fly while I'm at it.
 
 ## Acceptance Criteria
-Have a list of pictures where you are able to tag the images and preserve the tagged state after refresh
+- Gallery/List view of images
+- Images have tag/flag button
+- Tagged images are still rendered as tagged
 
 ## Requirements
 - docker (I used version 19.03.12)
@@ -17,6 +19,6 @@ Free Ports:
 ```
 docker-compose build
 docker-compose up # CMD + C
-docker-compose up # Need to run twice (DB vs. Web service race condition - out of scope!)
+docker-compose up # Need to run twice (Web service fails on first DB init - known docker problem, will not address, out of scope.)
 ```
 Go to `http://localhost:3000`
