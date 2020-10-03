@@ -8,7 +8,7 @@ function App() {
       <section className="section">
         <div className="container">
           <h1 className="title">
-            Hello World
+            Kenny's Useless Images
           </h1>
           <p className="subtitle">
             My first website with <strong>Bulma</strong>!

@@ -9,32 +9,33 @@ class ImageList extends React.Component {
   };
 
   componentDidMount() {
-    // TODO GET API
-    this.setState({
-      images: [
-        { id: 1, url: "https://picsum.photos/200/300", updated_at: "9:00", created_at: "1:00", flagged: false },
-        { id: 2, url: "https://picsum.photos/200/300", updated_at: "9:00", created_at: "1:00", flagged: true },
-        { id: 3, url: "https://picsum.photos/200/300", updated_at: "9:00", created_at: "1:00", flagged: false },
-        { id: 4, url: "https://picsum.photos/200/300", updated_at: "9:00", created_at: "1:00", flagged: false },
-      ]
-    })
+    fetch('http://localhost:8080') // Hard-coded localhost just for MVP demo purposes
+      .then(response => response.json())
+      .then(data =>
+        this.setState({
+          images: data
+        })
+      );
   }
 
-  handleClick(id){
-    console.log("hello",id)
+  handleClick(id) {
+    console.log("hello", id)
     // TODO POST API TO UPDATE FLAGGED - ON SUCCESS, SETSTATE - ON FAIL, RENDER ERROR
   }
 
 
   render() {
+    const hasImages = this.state.images.length > 0
     const imageList = this.state.images.map((i) => <li key={i.id}>
-      <img src={i.url}></img> <a onClick={() => this.handleClick(i.id)} class="button is-primary"> Tag</a>
+      <img src={i.url}></img>
+      <a onClick={() => this.handleClick(i.id)} className="button is-primary"> Tag</a>
     </li>);
-    return (
-      <div>
-        {imageList}
-      </div>
-    );
+
+    if (hasImages) {
+      return <div>{imageList}</div>
+    } else {
+      return <div>Oops, something went wrong! Please refresh!</div>
+    }
   }
 }
 
