@@ -63,14 +63,26 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 // UpdateImage updates attributes of an Image
 func UpdateImage(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
+	id := ps.ByName("id")
+	flagged := r.FormValue("flagged")
+
+	sqlStatement := `UPDATE images
+	SET flagged = $1
+	WHERE id = $2;`
+
+	_, err := DB.Exec(sqlStatement, flagged, id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func main() {
 	// setup router
 	router := httprouter.New()
 	router.GET("/", Index)
-	router.POST("/hello/:name", UpdateImage)
+	router.PUT("/image/:id", UpdateImage)
 
 	// establish db connection
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
